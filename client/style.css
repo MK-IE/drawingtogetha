@@ -1,8 +1,15 @@
+/* 
+    https://coolors.co/011627-fdfffc-2ec4b6-e71d36-ff9f1c
+*/
+
 body {
     padding: 0px;
     margin: 0px;
     font-family: sans-serif;
-    background: grey;
+}
+
+body {
+    background-color: rgb(46, 196, 182, 1);
 }
 
 .text-center {
@@ -16,7 +23,28 @@ body {
     align-items: center;
 }
 
+.bubble {
+    text-align: center;
+    vertical-align: bottom;
+    width: 40px;
+    height: 40px;
+    font-size: 30px;
+    line-height: 40px;
+    border-radius: 50%;
+    background-color: rgb(255, 255, 255, 1);
+    cursor: pointer;
+    margin: 0px 10px;
+    margin-top: 10px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+}
+
+.tools {
+    display: flex;
+    justify-content: center;
+}
+
 #canvas {
-    background: white;
-    border: 10px solid black;
+    background: rgb(253, 255, 252, 1);
+    box-shadow: 2px 2px 50px -7px rgba(0, 0, 0, 0.75);
+    border-radius: 15px;
 }

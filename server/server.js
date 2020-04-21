@@ -10,13 +10,16 @@ const io = socketio(server);
 app.use(express.static(clientPath));
 
 io.on("connection", (socket) => {
-    socket.on("message", (pos) => {
-        console.log(pos);
-        io.emit("message", pos);
+    socket.on("message", (msg) => {
+        if (msg !== null) {
+            io.emit("message", msg);
+        }
     });
 
-    socket.on("mouseorigin", (pos) => {
-        io.emit("mouseorigin", pos);
+    socket.on("mouseorigin", (msg) => {
+        if (msg !== null) {
+            io.emit("mouseorigin", msg);
+        }
     });
 });
 
