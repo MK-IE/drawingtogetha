@@ -1,0 +1,22 @@
+body {
+    padding: 0px;
+    margin: 0px;
+    font-family: sans-serif;
+    background: grey;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.center {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+#canvas {
+    background: white;
+    border: 10px solid black;
+}
