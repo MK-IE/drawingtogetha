@@ -12,13 +12,13 @@ app.use(express.static(clientPath));
 io.on("connection", (socket) => {
     socket.on("message", (msg) => {
         if (msg !== null) {
-            io.emit("message", msg);
+            io.compress(true).emit("message", msg);
         }
     });
 
     socket.on("mouseorigin", (msg) => {
         if (msg !== null) {
-            io.emit("mouseorigin", msg);
+            io.compress(true).emit("mouseorigin", msg);
         }
     });
 });

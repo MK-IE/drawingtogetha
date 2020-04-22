@@ -1,8 +1,26 @@
 const canvas = document.getElementById("canvas");
 const refreshBtn = document.getElementById("refresh");
 const fullScreeBtn = document.getElementById("fullscreen");
+const changeBrushBtn = document.getElementById("change-brush");
+const changeBgBtn = document.getElementById("change-bg");
 const ctx = canvas.getContext("2d");
 const socket = io();
+const bgColors = [
+    "rgb(1, 22, 39)",
+    "rgb(231, 29, 54)",
+    "rgb(255, 159, 28)",
+    "rgb(46, 196, 182)",
+];
+const brushColors = [
+    "rgb(0,0,0)",
+    "rgb(255, 190, 11)",
+    "rgb(251, 86, 7)",
+    "rgb(255, 0, 110)",
+    "rgb(131, 56, 236)",
+    "rgb(58, 134, 255)",
+];
+let shiftBrushColors = 0;
+let shiftBgColors = 0;
 
 const initCanvas = () => {
     canvas.width = window.innerWidth - window.innerWidth / 6;
@@ -69,7 +87,7 @@ const chooseEvent = (event) => {
  */
 
 const writeEvent = (messageType, payload) => {
-    socket.emit(messageType, payload);
+    socket.compress(true).emit(messageType, payload);
 };
 
 /**
@@ -91,6 +109,7 @@ const brushDown = (x, y) => {
  */
 
 const drawBrush = (x, y) => {
+    ctx.strokeStyle = brushColors[shiftBrushColors];
     ctx.lineTo(x, y);
     ctx.stroke();
 };
@@ -135,17 +154,17 @@ const toggleFullScreen = () => {
     }
 };
 
+//
 window.addEventListener("resize", () => {
     initCanvas();
+    console.log("Fired");
 });
-//
+
 //
 canvas.addEventListener("mousedown", brushDownListener);
 canvas.addEventListener("touchstart", brushDownListener);
-canvas.addEventListener("pointerdown", brushDownListener);
 canvas.addEventListener("touchmove", brushMoveListener);
 canvas.addEventListener("mousemove", brushMoveListener);
-canvas.addEventListener("pointermove", brushMoveListener);
 //
 fullScreeBtn.addEventListener("click", () => {
     toggleFullScreen();
@@ -153,6 +172,16 @@ fullScreeBtn.addEventListener("click", () => {
 
 refreshBtn.addEventListener("click", () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+});
+
+changeBgBtn.addEventListener("click", () => {
+    shiftBgColors = (shiftBgColors + 1) % bgColors.length;
+    document.body.style.background = bgColors[shiftBgColors];
+});
+
+changeBrushBtn.addEventListener("click", () => {
+    shiftBrushColors = (shiftBrushColors + 1) % brushColors.length;
+    changeBrushBtn.style.color = brushColors[shiftBrushColors];
 });
 
 //
