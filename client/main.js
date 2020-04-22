@@ -4,6 +4,7 @@ const fullScreeBtn = document.getElementById("fullscreen");
 const changeBrushBtn = document.getElementById("change-brush");
 const changeBgBtn = document.getElementById("change-bg");
 const ctx = canvas.getContext("2d");
+const receivedCtx = canvas.getContext("2d");
 const socket = io();
 const bgColors = [
     "rgb(1, 22, 39)",
@@ -43,10 +44,10 @@ socket.on("mouseorigin", ({ x, y, w, h }) => {
     brushDown(updatedX, updatedY);
 });
 
-socket.on("message", ({ x, y, w, h }) => {
+socket.on("message", ({ x, y, w, h, color }) => {
     const updatedX = map(x, w, 0, window.innerWidth, 0);
     const updatedY = map(y, 0, h, 0, window.innerHeight);
-    drawBrush(updatedX, updatedY);
+    drawBrush(updatedX, updatedY, color);
 });
 
 /* For interacting with events */
@@ -64,6 +65,7 @@ const chooseEvent = (event) => {
             h: window.innerHeight,
             x: event.clientX - boundaries.left,
             y: event.clientY - boundaries.top,
+            color: brushColors[shiftBrushColors],
         };
     } else if (event.type === "touchmove" || event.type === "touchstart") {
         return {
@@ -71,6 +73,7 @@ const chooseEvent = (event) => {
             h: window.innerHeight,
             x: event.touches[0].clientX - boundaries.left,
             y: event.touches[0].clientY - boundaries.top,
+            color: brushColors[shiftBrushColors],
         };
     }
     return null;
@@ -108,8 +111,8 @@ const brushDown = (x, y) => {
  * @param {*Position to end the line y-axis} y
  */
 
-const drawBrush = (x, y) => {
-    ctx.strokeStyle = brushColors[shiftBrushColors];
+const drawBrush = (x, y, color) => {
+    ctx.strokeStyle = color;
     ctx.lineTo(x, y);
     ctx.stroke();
 };
