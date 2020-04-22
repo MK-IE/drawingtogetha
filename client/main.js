@@ -53,7 +53,7 @@ socket.on("message", ({ x, y, w, h, color }) => {
 /* For interacting with events */
 
 /**
- *
+ * @author MK
  * @param {*Chose the right data to return based on the event received (desktop | mobile)} event
  */
 
@@ -84,7 +84,7 @@ const chooseEvent = (event) => {
 /* Drawing communication */
 
 /**
- *
+ * @author MK
  * @param {*The type of message to contact server} messageType
  * @param {*The content which the message is to carry} payload
  */
@@ -118,7 +118,7 @@ const drawBrush = (x, y, color) => {
 };
 
 /**
- *
+ * @author MK
  * @param {*The number to be squished into a new range} value
  * @param {*The original x range of the number which is being squished} istart
  * @param {*The original y range of the number which is being squished} istop
