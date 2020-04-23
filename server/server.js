@@ -27,8 +27,7 @@ server.on("error", (err) => {
     console.error("SERVER CRASHED", err);
 });
 
-const ip = "0.0.0.0";
-const port = 8080;
-server.listen(port, ip, () => {
+const port = process.env.PORT || 8080;
+server.listen(port, () => {
     console.log(`Listening on port ${port} ip ${ip}`);
 });
