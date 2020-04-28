@@ -13,6 +13,7 @@ const bgColors = [
     "rgb(46, 196, 182)",
 ];
 const brushColors = [
+    "rgb(255,255,255)",
     "rgb(0,0,0)",
     "rgb(255, 190, 11)",
     "rgb(251, 86, 7)",
@@ -22,6 +23,10 @@ const brushColors = [
 ];
 let shiftBrushColors = 0;
 let shiftBgColors = 0;
+let pMouse = {
+    x: 0,
+    y: 0,
+};
 
 const initCanvas = () => {
     canvas.width = window.innerWidth - window.innerWidth / 6;
@@ -30,12 +35,13 @@ const initCanvas = () => {
 
 const brushMoveListener = (event) => {
     const pos = chooseEvent(event);
+    pMouse = { x: pos.x, y: pos.y };
     writeEvent("message", pos);
 };
 
 const brushDownListener = (event) => {
     const pos = chooseEvent(event);
-    writeEvent("mouseorigin", pos);
+    pMouse = { x: pos.x, y: pos.y };
 };
 
 socket.on("mouseorigin", ({ x, y, w, h }) => {
@@ -44,9 +50,12 @@ socket.on("mouseorigin", ({ x, y, w, h }) => {
     brushDown(updatedX, updatedY);
 });
 
-socket.on("message", ({ x, y, w, h, color }) => {
+socket.on("message", ({ pX, pY, x, y, w, h, color }) => {
     const updatedX = map(x, w, 0, window.innerWidth, 0);
     const updatedY = map(y, 0, h, 0, window.innerHeight);
+    const pUpdatedX = map(pX, w, 0, window.innerWidth, 0);
+    const pUpdatedY = map(pY, 0, h, 0, window.innerHeight);
+    brushDown(pUpdatedX, pUpdatedY);
     drawBrush(updatedX, updatedY, color);
 });
 
@@ -63,6 +72,8 @@ const chooseEvent = (event) => {
         return {
             w: window.innerWidth,
             h: window.innerHeight,
+            pX: pMouse.x,
+            pY: pMouse.y,
             x: event.clientX - boundaries.left,
             y: event.clientY - boundaries.top,
             color: brushColors[shiftBrushColors],
@@ -71,6 +82,8 @@ const chooseEvent = (event) => {
         return {
             w: window.innerWidth,
             h: window.innerHeight,
+            pX: pMouse.x,
+            pY: pMouse.y,
             x: event.touches[0].clientX - boundaries.left,
             y: event.touches[0].clientY - boundaries.top,
             color: brushColors[shiftBrushColors],
