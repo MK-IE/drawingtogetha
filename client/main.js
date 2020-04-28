@@ -20,6 +20,7 @@ const brushColors = [
     "rgb(131, 56, 236)",
     "rgb(58, 134, 255)",
 ];
+let origin = null;
 let shiftBrushColors = 0;
 let shiftBgColors = 0;
 
@@ -28,25 +29,25 @@ const initCanvas = () => {
     canvas.height = window.innerHeight - window.innerHeight / 6;
 };
 
+const brushDownListener = (event) => {
+    const pos = chooseEvent(event);
+    origin = {
+        x: pos.x,
+        y: pos.y,
+    };
+};
+
 const brushMoveListener = (event) => {
     const pos = chooseEvent(event);
     writeEvent("message", pos);
 };
 
-const brushDownListener = (event) => {
-    const pos = chooseEvent(event);
-    writeEvent("mouseorigin", pos);
-};
-
-socket.on("mouseorigin", ({ x, y, w, h }) => {
+socket.on("message", ({ x, y, w, h, color, origin }) => {
     const updatedX = map(x, w, 0, window.innerWidth, 0);
     const updatedY = map(y, 0, h, 0, window.innerHeight);
-    brushDown(updatedX, updatedY);
-});
-
-socket.on("message", ({ x, y, w, h, color }) => {
-    const updatedX = map(x, w, 0, window.innerWidth, 0);
-    const updatedY = map(y, 0, h, 0, window.innerHeight);
+    const originX = map(origin.x, w, 0, window.innerWidth, 0);
+    const originY = map(origin.y, 0, h, 0, window.innerHeight);
+    brushDown(originX, originY);
     drawBrush(updatedX, updatedY, color);
 });
 
@@ -54,7 +55,8 @@ socket.on("message", ({ x, y, w, h, color }) => {
 
 /**
  * @author MK
- * @param {*Chose the right data to return based on the event received (desktop | mobile)} event
+ * @param {*Choose the right data to return based on the event received (desktop | mobile)} event
+ * @description Returns an event to be given back to a specific client
  */
 
 const chooseEvent = (event) => {
@@ -65,6 +67,7 @@ const chooseEvent = (event) => {
             h: window.innerHeight,
             x: event.clientX - boundaries.left,
             y: event.clientY - boundaries.top,
+            origin: origin,
             color: brushColors[shiftBrushColors],
         };
     } else if (event.type === "touchmove" || event.type === "touchstart") {
@@ -73,6 +76,7 @@ const chooseEvent = (event) => {
             h: window.innerHeight,
             x: event.touches[0].clientX - boundaries.left,
             y: event.touches[0].clientY - boundaries.top,
+            origin: origin,
             color: brushColors[shiftBrushColors],
         };
     }
@@ -87,6 +91,7 @@ const chooseEvent = (event) => {
  * @author MK
  * @param {*The type of message to contact server} messageType
  * @param {*The content which the message is to carry} payload
+ * @description Write a message to the server
  */
 
 const writeEvent = (messageType, payload) => {
@@ -97,6 +102,7 @@ const writeEvent = (messageType, payload) => {
  * @author MK
  * @param {*Position to start the line x-axis} x
  * @param {*Position to start the line y-axis} y
+ * @description Set the origin for the line to be drawn
  */
 
 const brushDown = (x, y) => {
@@ -109,6 +115,8 @@ const brushDown = (x, y) => {
  * @author MK
  * @param {*Position to end the line x-axis} x
  * @param {*Position to end the line y-axis} y
+ * @param {*The color to draw the current line stroke} color
+ * @description Draw a line on the canvas
  */
 
 const drawBrush = (x, y, color) => {
@@ -124,11 +132,19 @@ const drawBrush = (x, y, color) => {
  * @param {*The original y range of the number which is being squished} istop
  * @param {*The x into which the value should be squished into} ostart
  * @param {*The y into which the value should be squished into} ostop
+ * @description Can map ranges from istart-istop to ostart-ostop
  */
 
 const map = (value, istart, istop, ostart, ostop) => {
-    return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+    return Math.round(
+        ostart + (ostop - ostart) * ((value - istart) / (istop - istart))
+    );
 };
+
+/**
+ * @author MDN
+ * @description Toggles the fullscreen for most popular browsers
+ */
 
 const toggleFullScreen = () => {
     const doc = window.document;
@@ -160,14 +176,16 @@ const toggleFullScreen = () => {
 //
 window.addEventListener("resize", () => {
     initCanvas();
-    console.log("Fired");
 });
 
 //
 canvas.addEventListener("mousedown", brushDownListener);
 canvas.addEventListener("touchstart", brushDownListener);
+canvas.addEventListener("pointerdown", brushDownListener);
 canvas.addEventListener("touchmove", brushMoveListener);
 canvas.addEventListener("mousemove", brushMoveListener);
+canvas.addEventListener("pointermove", brushMoveListener);
+
 //
 fullScreeBtn.addEventListener("click", () => {
     toggleFullScreen();
@@ -188,4 +206,5 @@ changeBrushBtn.addEventListener("click", () => {
 });
 
 //
+
 initCanvas();

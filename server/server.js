@@ -11,14 +11,8 @@ app.use(express.static(clientPath));
 
 io.on("connection", (socket) => {
     socket.on("message", (msg) => {
-        if (msg !== null) {
+        if (msg !== null && msg.origin !== null) {
             io.compress(true).emit("message", msg);
-        }
-    });
-
-    socket.on("mouseorigin", (msg) => {
-        if (msg !== null) {
-            io.compress(true).emit("mouseorigin", msg);
         }
     });
 });
@@ -28,6 +22,4 @@ server.on("error", (err) => {
 });
 
 const port = process.env.PORT || 8080;
-server.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-});
+server.listen(port);
