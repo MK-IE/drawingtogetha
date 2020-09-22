@@ -6,50 +6,37 @@
             name="viewport"
             content="width=device-width, initial-scale=1, user-scalable=no"
         />
-        <title>
-            DrawingTogetha
-        </title>
+        <title>DrawingTogetha</title>
         <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
-        <link rel="stylesheet" href="style.css" />
     </head>
     <body>
         <div class="tools">
             <div class="bubble" id="fullscreen">
                 <div>
-                    <span class="material-icons">
-                        aspect_ratio
-                    </span>
+                    <span class="material-icons"> aspect_ratio </span>
                 </div>
             </div>
             <div class="bubble" id="refresh">
                 <div>
-                    <span class="material-icons">
-                        refresh
-                    </span>
+                    <span class="material-icons"> refresh </span>
                 </div>
             </div>
             <div class="bubble" id="change-bg">
                 <div>
-                    <span class="material-icons">
-                        sync_alt
-                    </span>
+                    <span class="material-icons"> sync_alt </span>
                 </div>
             </div>
             <div class="bubble" id="change-brush">
                 <div>
-                    <span class="material-icons">
-                        brush
-                    </span>
+                    <span class="material-icons"> brush </span>
                 </div>
             </div>
         </div>
         <div class="center">
             <canvas id="canvas"></canvas>
         </div>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="main.js"></script>
     </body>
 </html>
