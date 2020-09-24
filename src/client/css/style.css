@@ -7,7 +7,6 @@ body {
     margin: 0px;
     font-family: sans-serif;
     overflow: hidden;
-    background-color: rgb(46, 196, 182, 1);
 }
 
 .text-center {
@@ -23,7 +22,6 @@ body {
 
 .bubble {
     text-align: center;
-    vertical-align: bottom;
     margin: 0px 10px;
     margin-top: 10px;
     width: 40px;

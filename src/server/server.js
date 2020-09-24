@@ -9,14 +9,20 @@ const io = socketio(server);
 io.set("origins", "http://localhost:8080");
 // app.use(express.static(clientPath));
 
-io.on("connection", (socket) => {
-    socket.on("message", (msg) => {
+io.on("connect", (socket) => {
+    socket.on("brush_down", (msg) => {
         if (msg !== null && msg.origin !== null) {
-            io.compress(true).emit("message", msg);
             console.log(msg);
+            io.emit("brush_down", msg);
         }
     });
-    console.log("connected");
+
+    socket.on("brush_draw", (msg) => {
+        if (msg !== null && msg.origin !== null) {
+            console.log(msg);
+            io.emit("brush_draw", msg);
+        }
+    });
 });
 
 server.on("error", (err) => {

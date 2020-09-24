@@ -2,11 +2,11 @@
     "name": "drawingtogetha",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "server.js",
     "scripts": {
         "start": "webpack-dev-server --config webpack.dev.js --open",
         "build": "webpack --config webpack.prod.js",
-        "dev": "nodemon ./  src/server/server.js"
+        "dev": "nodemon ./src/server/server.js"
     },
     "keywords": [],
     "author": "",
