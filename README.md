@@ -1,3 +1,3 @@
 # drawingtogetha
 
-Univeral canvas to draw across networks
+Universal canvas which scales relative to screen sizes.
